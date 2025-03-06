@@ -1,27 +1,38 @@
-"use client"
+"use client";
 
-import { useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { useAuth } from "@/components/auth/auth-provider"
-import { MainNav } from "@/components/main-nav"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { CalendarDays, Users, FileText, Settings } from "lucide-react"
-import { ContentSubmissionForm } from "@/components/content-submission-form"
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/components/auth/auth-provider";
+import { MainNav } from "@/components/main-nav";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { CalendarDays, Users, FileText, Settings } from "lucide-react";
+import { ContentSubmissionForm } from "@/components/content-submission-form";
+import { ContentForm } from "@/components/content/content-form";
 
 export default function DashboardPage() {
-  const { user, loading } = useAuth()
-  const router = useRouter()
+  const { user, loading } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     if (!loading && !user) {
-      router.push("/login")
+      router.push("/login");
     }
-  }, [user, loading, router])
+  }, [user, loading, router]);
 
   if (loading || !user) {
-    return <div className="flex items-center justify-center min-h-screen">Loading...</div>
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        Loading...
+      </div>
+    );
   }
 
   return (
@@ -34,7 +45,8 @@ export default function DashboardPage() {
             <p className="text-muted-foreground">Welcome back, {user.name}</p>
           </div>
           <div className="mt-4 md:mt-0 flex gap-2">
-            <ContentSubmissionForm />
+            {/* <ContentSubmissionForm /> */}
+            <ContentForm />
             <Button>
               <Settings className="mr-2 h-4 w-4" />
               Settings
@@ -54,42 +66,58 @@ export default function DashboardPage() {
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Total Members</CardTitle>
+                  <CardTitle className="text-sm font-medium">
+                    Total Members
+                  </CardTitle>
                   <Users className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">1,248</div>
-                  <p className="text-xs text-muted-foreground">+12% from last month</p>
+                  <p className="text-xs text-muted-foreground">
+                    +12% from last month
+                  </p>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Upcoming Events</CardTitle>
+                  <CardTitle className="text-sm font-medium">
+                    Upcoming Events
+                  </CardTitle>
                   <CalendarDays className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">8</div>
-                  <p className="text-xs text-muted-foreground">Next: Sunday Service</p>
+                  <p className="text-xs text-muted-foreground">
+                    Next: Sunday Service
+                  </p>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">Active Ministries</CardTitle>
+                  <CardTitle className="text-sm font-medium">
+                    Active Ministries
+                  </CardTitle>
                   <FileText className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">12</div>
-                  <p className="text-xs text-muted-foreground">3 with upcoming activities</p>
+                  <p className="text-xs text-muted-foreground">
+                    3 with upcoming activities
+                  </p>
                 </CardContent>
               </Card>
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">New Visitors</CardTitle>
+                  <CardTitle className="text-sm font-medium">
+                    New Visitors
+                  </CardTitle>
                   <Users className="h-4 w-4 text-muted-foreground" />
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">24</div>
-                  <p className="text-xs text-muted-foreground">+8% from last month</p>
+                  <p className="text-xs text-muted-foreground">
+                    +8% from last month
+                  </p>
                 </CardContent>
               </Card>
             </div>
@@ -105,7 +133,9 @@ export default function DashboardPage() {
                         <div className="w-2 h-2 rounded-full bg-primary mr-2"></div>
                         <div className="flex-1">
                           <p className="text-sm font-medium">Activity {i}</p>
-                          <p className="text-xs text-muted-foreground">{new Date().toLocaleDateString()}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {new Date().toLocaleDateString()}
+                          </p>
                         </div>
                       </div>
                     ))}
@@ -125,7 +155,9 @@ export default function DashboardPage() {
                         <div className="flex-1">
                           <p className="text-sm font-medium">Event {i}</p>
                           <p className="text-xs text-muted-foreground">
-                            {new Date(Date.now() + i * 86400000).toLocaleDateString()}
+                            {new Date(
+                              Date.now() + i * 86400000
+                            ).toLocaleDateString()}
                           </p>
                         </div>
                       </div>
@@ -140,7 +172,9 @@ export default function DashboardPage() {
               <CardHeader className="flex flex-row items-center justify-between">
                 <div>
                   <CardTitle>Content Submissions</CardTitle>
-                  <CardDescription>Manage content submitted by church members</CardDescription>
+                  <CardDescription>
+                    Manage content submitted by church members
+                  </CardDescription>
                 </div>
                 <ContentSubmissionForm />
               </CardHeader>
@@ -151,7 +185,9 @@ export default function DashboardPage() {
                       <div className="flex items-center justify-between">
                         <div>
                           <h3 className="font-medium">Youth Camp Testimony</h3>
-                          <p className="text-sm text-muted-foreground">Testimony • Submitted by John Doe</p>
+                          <p className="text-sm text-muted-foreground">
+                            Testimony • Submitted by John Doe
+                          </p>
                         </div>
                         <div className="flex gap-2">
                           <Button variant="outline" size="sm">
@@ -168,8 +204,12 @@ export default function DashboardPage() {
                     <div className="p-4">
                       <div className="flex items-center justify-between">
                         <div>
-                          <h3 className="font-medium">Prayer Request for Healing</h3>
-                          <p className="text-sm text-muted-foreground">Prayer Request • Submitted by Mary Smith</p>
+                          <h3 className="font-medium">
+                            Prayer Request for Healing
+                          </h3>
+                          <p className="text-sm text-muted-foreground">
+                            Prayer Request • Submitted by Mary Smith
+                          </p>
                         </div>
                         <div className="flex gap-2">
                           <Button variant="outline" size="sm">
@@ -186,8 +226,12 @@ export default function DashboardPage() {
                     <div className="p-4">
                       <div className="flex items-center justify-between">
                         <div>
-                          <h3 className="font-medium">Community Outreach Announcement</h3>
-                          <p className="text-sm text-muted-foreground">Announcement • Submitted by Pastor James</p>
+                          <h3 className="font-medium">
+                            Community Outreach Announcement
+                          </h3>
+                          <p className="text-sm text-muted-foreground">
+                            Announcement • Submitted by Pastor James
+                          </p>
                         </div>
                         <div className="flex gap-2">
                           <Button variant="outline" size="sm">
@@ -208,7 +252,9 @@ export default function DashboardPage() {
             <Card>
               <CardHeader>
                 <CardTitle>Events Calendar</CardTitle>
-                <CardDescription>View and manage upcoming church events</CardDescription>
+                <CardDescription>
+                  View and manage upcoming church events
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <p>Events calendar content will be displayed here.</p>
@@ -219,7 +265,9 @@ export default function DashboardPage() {
             <Card>
               <CardHeader>
                 <CardTitle>Church Members</CardTitle>
-                <CardDescription>View and manage church membership</CardDescription>
+                <CardDescription>
+                  View and manage church membership
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <p>Member directory content will be displayed here.</p>
@@ -230,7 +278,9 @@ export default function DashboardPage() {
             <Card>
               <CardHeader>
                 <CardTitle>Reports</CardTitle>
-                <CardDescription>View church reports and analytics</CardDescription>
+                <CardDescription>
+                  View church reports and analytics
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <p>Reports content will be displayed here.</p>
@@ -240,6 +290,5 @@ export default function DashboardPage() {
         </Tabs>
       </div>
     </div>
-  )
+  );
 }
-

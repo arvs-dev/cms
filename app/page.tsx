@@ -75,10 +75,10 @@ export default function Home() {
             priority
           />
 
-          <div className="absolute inset-0 flex flex-col justify-center px-6 sm:px-12 md:px-24 lg:px-36 text-center sm:text-left bg-gradient-to-r from-primary via-yellow-500/10 to-transparent">
-            <div className="max-w-2xl mx-auto sm:mx-0">
+          <div className="absolute inset-0 flex flex-col justify-center px-6 sm:px-12 md:px-24 lg:px-36 text-center sm:text-left bg-gradient-to-r from-stone-800 via-stone-500/10 to-transparent">
+            <div className="max-w-3xl mx-auto sm:mx-0">
               <div className="lg:pl-16">
-                <div className="inline-block bg-primary px-4 py-2 text-white mb-4">
+                <div className="inline-block bg-stone-800 rounded-sm px-4 py-2 text-white mb-4">
                   February {dateYear}
                 </div>
               </div>
@@ -89,9 +89,9 @@ export default function Home() {
               </h1>
 
               {/* Content Submission Form Button */}
-              <div className="mt-8 lg:pl-16">
+              {/* <div className="mt-8 lg:pl-16">
                 <ContentSubmissionForm />
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

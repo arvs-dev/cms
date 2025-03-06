@@ -36,7 +36,7 @@ export function MainNav() {
 
   return (
     <header className="bg-white shadow-sm w-full">
-      <div className="container mx-auto flex items-center justify-between  px-6 lg:px-12">
+      <div className="container mx-auto flex items-center justify-between px-6 lg:px-12">
         {/* Mobile Menu */}
         <Sheet>
           <SheetTrigger className="lg:hidden">
@@ -113,7 +113,7 @@ export function MainNav() {
                       <NavigationMenuLink asChild>
                         <Link
                           href={ministry.href}
-                          className="block rounded-md p-2 text-sm hover:bg-accent hover:text-accent-foreground"
+                          className="block rounded-md p-2 text-sm hover:bg-primary hover:text-white"
                         >
                           {ministry.title}
                         </Link>
@@ -195,15 +195,11 @@ export function MainNav() {
             <Link href="/dashboard">
               <Button variant="ghost">Dashboard</Button>
             </Link>
-          ) : (
-            <Link href="/login">
-              <Button variant="ghost">Login</Button>
-            </Link>
-          )}
+          ) : null}
           <Link
             href="https://www.facebook.com/NLMAdventistMedia"
             target="_blank"
-            className="bg-primary text-white px-10 py-10 font-medium hover:bg-primary/90 transition"
+            className="bg-primary text-white py-3 px-3 lg:px-8 lg:py-8 text-xs lg:text-sm hover:bg-primary/90 transition"
           >
             Visit Us
           </Link>
