@@ -20,19 +20,14 @@ export function Footer() {
   const { user } = useAuth();
 
   return (
-    <header className="bg-stone-800 shadow-sm w-full">
-      <div className="container flex flex-row justify-between px-6 lg:px-12">
+    <header className="bg-primary shadow-sm w-full">
+      <div className="flex flex-row-reverse justify-between px-52">
         {/* Actions */}
-        <div className="flex items-center text-white">
-          <h1 className="lg:text-xl text-medium font-medium">
-            NORTHERN LUZON MISSION of the Seventh-day Adventist
-          </h1>
-        </div>
         <div className="flex items-center ">
           <Link
             href="https://www.facebook.com/NLMAdventistMedia"
             target="_blank"
-            className="bg-primary text-white px-10 py-10 font-medium hover:bg-primary/90 transition"
+            className="bg-white text-primary px-10 py-10 font-medium hover:bg-white/90 transition"
           >
             Visit Info
           </Link>
