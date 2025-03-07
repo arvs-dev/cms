@@ -53,7 +53,7 @@ export default function Home() {
         <div>
           <button
             onClick={prevSlide}
-            className="absolute left-10 top-1/2 -translate-y-1/2 bg-white/20 p-2 sm:p-4 text-white z-10 rounded-full"
+            className="absolute left-10 top-1/2 -translate-y-1/2 bg-[#FCA311]/20 p-2 sm:p-4 text-white z-10 rounded-full"
           >
             <ChevronLeft size={24} />
           </button>
@@ -66,37 +66,44 @@ export default function Home() {
         </div>
 
         {/* Slide Content */}
-        <div className="relative w-full h-full ">
+        <div className="relative w-full h-screen ">
           <Image
             src={images[currentIndex]}
             alt="Church Building"
             fill
-            className="object-cover brightness-50 transition-opacity duration-1000 "
+            className="object-cover brightness-50 transition-opacity duration-1000"
             priority
           />
-
-          <div className="absolute inset-0 flex flex-col justify-center px-6 sm:px-12 md:px-24 lg:px-36 text-center sm:text-left bg-gradient-to-r from-stone-800 via-stone-500/10 to-transparent">
-            <div className="max-w-3xl mx-auto sm:mx-0">
-              <div className="lg:pl-16">
-                <div className="inline-block bg-stone-800 rounded-sm px-4 py-2 text-white mb-4">
-                  February {dateYear}
+          {/* mt-96 pt-48 */}
+          <div className="absolute inset-0 flex flex-col justify-center px-6 sm:px-12 md:px-24 lg:px-36 text-center sm:text-left bg-gradient-to-t from-primary via-stone-500/50 to-transparent">
+            <Image
+              src={images[currentIndex]}
+              alt="Church Building"
+              width={900}
+              height={900}
+              className="lg:pl-16 object-cover rounded-md mb-6"
+              priority
+            />
+            <div className="max-w-5xl mx-auto sm:mx-0">
+              <h1 className="text-white lg:pl-16 mb-4">
+                <div className="mt-2 text-7xl font-bold">
+                  Northern Luzon Mission
                 </div>
-              </div>
-              <h1 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-7xl lg:pl-16 font-bold mb-4">
-                Faithfulness In
-                <div className="mt-2">Christian</div>
-                <div className="mt-2">Lifestyle</div>
+                <div className="mt-2 font-sans">
+                  Bringing Hope, Truth and Inspiration to live by while living
+                  and waiting for the second coming of our Lord Jesus Christ.
+                </div>
               </h1>
-
-              {/* Content Submission Form Button */}
-              {/* <div className="mt-8 lg:pl-16">
-                <ContentSubmissionForm />
-              </div> */}
             </div>
           </div>
         </div>
       </div>
       <Footer />
+      <section className="h-screen bg-gray-100">
+        <div>
+          <p>dasd</p>
+        </div>
+      </section>
     </main>
   );
 }
