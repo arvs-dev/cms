@@ -17,6 +17,7 @@ import {
   PlusCircle,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "./auth/auth-provider";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -28,6 +29,8 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const router = useRouter();
   const { toast } = useToast();
 
+  const { loading } = useAuth();
+
   const navigation = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { name: "Posts", href: "/dashboard/posts", icon: FileText },
@@ -35,13 +38,22 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     { name: "Settings", href: "/dashboard/settings", icon: Settings },
   ];
 
-  const handleLogout = () => {
-    // In a real app, you would handle logout logic here
-    toast({
-      title: "Logged out",
-      description: "You have been logged out successfully.",
-    });
-    router.push("/login");
+  const handleLogout = async () => {
+    try {
+      localStorage.removeItem("user");
+      toast({
+        title: "Logged out",
+        description: "You have been logged out successfully.",
+      });
+      router.push("/");
+      location.reload();
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to logout. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -89,6 +101,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               variant="outline"
               className="w-full justify-start"
               onClick={handleLogout}
+              disabled={loading}
             >
               <LogOut className="mr-2 h-4 w-4" />
               Logout
@@ -168,6 +181,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               variant="outline"
               className="w-full justify-start"
               onClick={handleLogout}
+              disabled={loading}
             >
               <LogOut className="mr-2 h-4 w-4" />
               Logout

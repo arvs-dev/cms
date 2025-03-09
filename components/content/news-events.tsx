@@ -130,11 +130,11 @@ export default function NewsEventsBento() {
                 key={item.id}
                 className="col-span-1 md:col-span-4 row-span-2 overflow-hidden group"
               >
-                <div className="relative h-[500px] transition-transform duration-300 group-hover:scale-105">
+                <div className="relative h-[540px] bg-primary transition-transform duration-300 group-hover:scale-105">
                   <img
                     src={item.image || "/placeholder.svg"}
                     alt={item.title}
-                    className="h-full w-full object-cover "
+                    className="h-full w-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
                   <div className="absolute bottom-0 p-6 text-white">
@@ -172,14 +172,16 @@ export default function NewsEventsBento() {
             return (
               <Card
                 key={item.id}
-                className="col-span-1 md:col-span-2 row-span-2 overflow-hidden "
+                className="col-span-1 md:col-span-2 row-span-2 overflow-hidden bg-primary text-white py-3"
               >
                 <CardHeader className="pb-2">
                   <Badge className="w-fit mb-2 bg-orange-100 text-orange-700 hover:bg-orange-100 hover:text-orange-700">
                     {item.category}
                   </Badge>
-                  <CardTitle className="text-xl">{item.title}</CardTitle>
-                  <CardDescription className="line-clamp-2">
+                  <CardTitle className="text-xl text-white">
+                    {item.title}
+                  </CardTitle>
+                  <CardDescription className="line-clamp-2 text-white">
                     {item.description}
                   </CardDescription>
                 </CardHeader>
@@ -191,7 +193,7 @@ export default function NewsEventsBento() {
                   />
                   <div className="space-y-2">
                     <div className="flex items-center text-sm">
-                      <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
+                      <Calendar className="h-4 w-4 mr-2 text-white" />
                       <span>{item.date}</span>
                     </div>
                     <p className="font-light italic text-[12px]">

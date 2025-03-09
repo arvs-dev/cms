@@ -59,7 +59,7 @@ export default function Home() {
             priority
           />
 
-          <div className="absolute inset-0 flex flex-col justify-center px-6 sm:px-12 md:px-24 lg:px-20 text-center sm:text-left bg-gradient-to-t from-primary/50 via-primary/50 to-transparent">
+          <div className="absolute inset-0 flex flex-col justify-center px-6 sm:px-12 md:px-24 lg:px-20 text-center sm:text-left bg-gradient-to-t from-primary via-gray-900/50 to-transparent">
             {/* <div className="hidden lg:block">
               <Image
                 src={images[currentIndex]}
@@ -70,12 +70,12 @@ export default function Home() {
                 priority
               />
             </div> */}
-            <div className="max-w-5xl mx-auto sm:mx-0 lg:pl-16">
-              <h1 className="text-white lg:pl-5 py-2 mb-4">
-                <div className="mt-2 text-4xl sm:text-5xl md:text-6xl lg:text-6xl font-bold">
+            <div className="max-w-5xl mx-auto sm:mx-0 lg:mt-96">
+              <h1 className="text-white">
+                <div className="mt-2 text-4xl py-2 sm:text-5xl md:text-6xl lg:text-6xl font-bold">
                   Northern Luzon Mission
                 </div>
-                <div className="mt-2 font-sans text-sm sm:text-base md:text-lg lg:text-xl">
+                <div className="mt-2 font-sans text-xs sm:text-base md:text-md lg:text-lg">
                   Bringing Hope, Truth, and Inspiration to live by while living
                   and waiting for the second coming of our Lord Jesus Christ.
                 </div>

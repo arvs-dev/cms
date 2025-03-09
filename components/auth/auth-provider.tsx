@@ -1,49 +1,49 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { createContext, useContext, useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { useToast } from "@/components/ui/use-toast"
+import { createContext, useContext, useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/components/ui/use-toast";
 
 type User = {
-  id: string
-  name: string
-  email: string
-  role: "admin" | "member" | "guest"
-}
+  id: string;
+  name: string;
+  email: string;
+  role: "admin" | "member" | "guest";
+};
 
 type AuthContextType = {
-  user: User | null
-  login: (email: string, password: string) => Promise<void>
-  register: (name: string, email: string, password: string) => Promise<void>
-  logout: () => void
-  loading: boolean
-}
+  user: User | null;
+  login: (email: string, password: string) => Promise<void>;
+  register: (name: string, email: string, password: string) => Promise<void>;
+  logout: () => void;
+  loading: boolean;
+};
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined)
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(true)
-  const router = useRouter()
-  const { toast } = useToast()
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+  const { toast } = useToast();
 
   useEffect(() => {
     // Check if user is logged in from localStorage
-    const storedUser = localStorage.getItem("user")
+    const storedUser = localStorage.getItem("user");
     if (storedUser) {
-      setUser(JSON.parse(storedUser))
+      setUser(JSON.parse(storedUser));
     }
-    setLoading(false)
-  }, [])
+    setLoading(false);
+  }, []);
 
   const login = async (email: string, password: string) => {
-    setLoading(true)
+    setLoading(true);
     try {
       // In a real app, this would be an API call
       // Simulating API call with timeout
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // Mock user for demo purposes
       if (email === "admin@example.com" && password === "password") {
@@ -52,38 +52,38 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           name: "Admin User",
           email: "admin@example.com",
           role: "admin" as const,
-        }
-        setUser(user)
-        localStorage.setItem("user", JSON.stringify(user))
+        };
+        setUser(user);
+        localStorage.setItem("user", JSON.stringify(user));
         toast({
           title: "Login successful",
           description: "Welcome back, Admin User!",
-        })
-        router.push("/dashboard")
+        });
+        router.push("/dashboard");
       } else {
         toast({
           variant: "destructive",
           title: "Login failed",
           description: "Invalid email or password",
-        })
+        });
       }
     } catch (error) {
       toast({
         variant: "destructive",
         title: "Login failed",
         description: "An error occurred during login",
-      })
+      });
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const register = async (name: string, email: string, password: string) => {
-    setLoading(true)
+    setLoading(true);
     try {
       // In a real app, this would be an API call
       // Simulating API call with timeout
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // Mock registration
       const user = {
@@ -91,43 +91,55 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         name,
         email,
         role: "member" as const,
-      }
-      setUser(user)
-      localStorage.setItem("user", JSON.stringify(user))
+      };
+      setUser(user);
+      localStorage.setItem("user", JSON.stringify(user));
       toast({
         title: "Registration successful",
         description: `Welcome, ${name}!`,
-      })
-      router.push("/dashboard")
+      });
+      router.push("/dashboard");
     } catch (error) {
       toast({
         variant: "destructive",
         title: "Registration failed",
         description: "An error occurred during registration",
-      })
+      });
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const logout = () => {
-    setUser(null)
-    localStorage.removeItem("user")
-    toast({
-      title: "Logged out",
-      description: "You have been successfully logged out",
-    })
-    router.push("/")
-  }
+    try {
+      localStorage.removeItem("user");
+      setUser(null);
+      toast({
+        title: "Logged out",
+        description: "You have been successfully logged out",
+      });
+      router.push("/");
+    } catch (error) {
+      console.error("Error during logout:", error);
+      toast({
+        variant: "destructive",
+        title: "Logout failed",
+        description: "An error occurred during logout",
+      });
+    }
+  };
 
-  return <AuthContext.Provider value={{ user, login, register, logout, loading }}>{children}</AuthContext.Provider>
+  return (
+    <AuthContext.Provider value={{ user, login, register, logout, loading }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth() {
-  const context = useContext(AuthContext)
+  const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider")
+    throw new Error("useAuth must be used within an AuthProvider");
   }
-  return context
+  return context;
 }
-
