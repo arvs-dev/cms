@@ -55,7 +55,7 @@ export default function Home() {
             src={images[currentIndex]}
             alt="Church Building"
             fill
-            className="object-cover brightness-50 transition-opacity duration-1000"
+            className="object-cover brightness-50 grayscale transition-opacity duration-1000"
             priority
           />
 

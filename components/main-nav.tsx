@@ -62,7 +62,7 @@ export function MainNav() {
                   ))}
                 </ul>
               </div>
-              <Link href="/news" className="text-gray-800 font-medium">
+              <Link href="/news-events" className="text-gray-800 font-medium">
                 News & Events
               </Link>
               <Link href="/projects" className="text-gray-800 font-medium">
@@ -121,7 +121,7 @@ export function MainNav() {
               </NavigationMenuContent>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Link href="/news" passHref>
+              <Link href="/news-events" passHref>
                 <NavigationMenuLink
                   className={cn(
                     "py-2 px-3 text-gray-800 font-medium",
@@ -129,18 +129,6 @@ export function MainNav() {
                   )}
                 >
                   News & Events
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Link href="/projects" passHref>
-                <NavigationMenuLink
-                  className={cn(
-                    "py-2 px-3 text-gray-800 font-medium",
-                    pathname === "/projects" && "text-primary font-semibold"
-                  )}
-                >
-                  Projects
                 </NavigationMenuLink>
               </Link>
             </NavigationMenuItem>
