@@ -63,10 +63,7 @@ export function MainNav() {
                 </ul>
               </div>
               <Link href="/news" className="text-gray-800 font-medium">
-                News
-              </Link>
-              <Link href="/events" className="text-gray-800 font-medium">
-                Events
+                News & Events
               </Link>
               <Link href="/projects" className="text-gray-800 font-medium">
                 Projects
@@ -131,19 +128,7 @@ export function MainNav() {
                     pathname === "/news" && "text-primary font-semibold"
                   )}
                 >
-                  News
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Link href="/events" passHref>
-                <NavigationMenuLink
-                  className={cn(
-                    "py-2 px-3 text-gray-800 font-medium",
-                    pathname === "/events" && "text-primary font-semibold"
-                  )}
-                >
-                  Events
+                  News & Events
                 </NavigationMenuLink>
               </Link>
             </NavigationMenuItem>
@@ -199,7 +184,7 @@ export function MainNav() {
           <Link
             href="https://www.facebook.com/NLMAdventistMedia"
             target="_blank"
-            className="bg-primary text-white py-3 px-3 lg:px-8 lg:py-8 text-xs lg:text-sm hover:bg-primary/90 transition"
+            className="bg-primary text-white py-5 px-5 lg:px-8 lg:py-8 text-xs lg:text-sm hover:bg-primary/90 transition"
           >
             Visit Us
           </Link>
