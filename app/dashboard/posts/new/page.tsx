@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -39,19 +39,17 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import DashboardLayout from "@/components/dashboard-layout";
 import { useToast } from "@/hooks/use-toast";
-import { CalendarIcon, Eye, Save } from "lucide-react";
+import { CalendarIcon, Eye, Save, Upload, X } from "lucide-react";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
+import Image from "next/image";
+import { supabase } from "@/lib/supabase";
 
 // In a real app, these would be fetched from your API
 const categories = [
-  { id: 1, name: "Development" },
-  { id: 2, name: "React" },
-  { id: 3, name: "JavaScript" },
-  { id: 4, name: "CSS" },
-  { id: 5, name: "TypeScript" },
-  { id: 6, name: "Backend" },
-  { id: 7, name: "Design" },
+  { id: 1, name: "News" },
+  { id: 2, name: "Events" },
+  { id: 3, name: "Projects" },
 ];
 
 export default function NewPostPage() {
@@ -59,14 +57,17 @@ export default function NewPostPage() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [postData, setPostData] = useState({
     title: "",
     content: "",
-    excerpt: "",
     category: "",
     status: "draft",
     publishDate: null as Date | null,
+    imageUrl: null as string | null,
+    imagePath: null as string | null, // Store the path in Supabase storage
   });
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -86,13 +87,118 @@ export default function NewPostPage() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Check file type
+    if (!file.type.startsWith("image/")) {
+      toast({
+        title: "Invalid file type",
+        description: "Please upload an image file",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Check file size (limit to 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast({
+        title: "File too large",
+        description: "Image size should be less than 5MB",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      setIsUploading(true);
+
+      // Create a unique file name
+      const fileExt = file.name.split(".").pop();
+      const fileName = `${Math.random()
+        .toString(36)
+        .substring(2, 15)}_${Date.now()}.${fileExt}`;
+      const filePath = `uploads/${fileName}`;
+
+      // Upload to Supabase Storage
+      const { error: uploadError } = await supabase.storage
+        .from("content-image")
+        .upload(filePath, file);
+
+      if (uploadError) {
+        throw uploadError;
+      }
+
+      // Get the public URL
+      const { data } = supabase.storage
+        .from("content-image")
+        .getPublicUrl(filePath);
+
+      // Update state with the image URL and path
+      setPostData((prev) => ({
+        ...prev,
+        imageUrl: data.publicUrl,
+        imagePath: filePath,
+      }));
+
+      toast({
+        title: "Image uploaded",
+        description: "Your image has been uploaded successfully",
+      });
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      toast({
+        title: "Upload failed",
+        description: "There was an error uploading your image",
+        variant: "destructive",
+      });
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const removeImage = async () => {
+    if (postData.imagePath) {
+      try {
+        const { error } = await supabase.storage
+          .from("content-image")
+          .remove([postData.imagePath]);
+
+        if (error) {
+          throw error;
+        }
+      } catch (error) {
+        console.error("Error removing image:", error);
+        // Continue anyway to remove from UI
+      }
+    }
+
+    setPostData((prev) => ({ ...prev, imageUrl: null, imagePath: null }));
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // In a real app, you would save the post to your database here
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      const { error } = await supabase.from("contents").insert({
+        title: postData.title,
+        body: postData.content,
+        category: postData.category || null,
+        published_date:
+          postData.publishDate || new Date().toISOString() || null,
+        image_url: postData.imageUrl || null,
+        image_path: postData.imagePath || null,
+        created_at: new Date().toISOString(),
+        publication_status: postData.status,
+      });
+
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       toast({
         title: "Post created",
         description:
@@ -103,7 +209,16 @@ export default function NewPostPage() {
             : "Your post has been saved as a draft.",
       });
       router.push("/dashboard/posts");
-    }, 1000);
+    } catch (error) {
+      console.error("Error saving post:", error);
+      toast({
+        title: "Error",
+        description: "There was an error saving your post",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -130,13 +245,20 @@ export default function NewPostPage() {
                   <h1 className="text-3xl font-bold">
                     {postData.title || "Untitled Post"}
                   </h1>
+                  {postData.imageUrl && (
+                    <div className="relative aspect-video w-full overflow-hidden rounded-lg mb-4">
+                      <Image
+                        src={postData.imageUrl || "/placeholder.svg"}
+                        alt="Featured image"
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  )}
                   {postData.category && (
                     <div className="text-sm text-muted-foreground">
                       Category: {postData.category}
                     </div>
-                  )}
-                  {postData.excerpt && (
-                    <p className="text-lg font-medium">{postData.excerpt}</p>
                   )}
                   <div className="prose max-w-none">
                     {postData.content ? (
@@ -179,16 +301,58 @@ export default function NewPostPage() {
                       required
                     />
                   </div>
+
                   <div className="space-y-2">
-                    <Label htmlFor="excerpt">Excerpt</Label>
-                    <Textarea
-                      id="excerpt"
-                      name="excerpt"
-                      placeholder="Brief summary of your post"
-                      value={postData.excerpt}
-                      onChange={handleInputChange}
-                      rows={3}
-                    />
+                    <Label>Featured Image</Label>
+                    <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-4">
+                      {postData.imageUrl ? (
+                        <div className="relative">
+                          <div className="relative aspect-video w-full overflow-hidden rounded-lg">
+                            <Image
+                              src={postData.imageUrl || "/placeholder.svg"}
+                              alt="Featured image preview"
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            size="icon"
+                            className="absolute top-2 right-2"
+                            onClick={removeImage}
+                          >
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col items-center justify-center py-4">
+                          <Upload className="h-8 w-8 text-muted-foreground mb-2" />
+                          <p className="text-sm text-muted-foreground mb-2">
+                            Drag and drop an image, or click to browse
+                          </p>
+                          <Button
+                            type="button"
+                            variant="secondary"
+                            onClick={() => fileInputRef.current?.click()}
+                            disabled={isUploading}
+                          >
+                            {isUploading ? "Uploading..." : "Select Image"}
+                          </Button>
+                          <input
+                            ref={fileInputRef}
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={handleImageUpload}
+                            disabled={isUploading}
+                          />
+                        </div>
+                      )}
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Recommended: 1200×630px, JPEG or PNG, max 5MB
+                    </p>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="content">Content</Label>

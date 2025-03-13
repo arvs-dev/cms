@@ -58,18 +58,7 @@ export default function Home() {
             className="object-cover brightness-50 grayscale transition-opacity duration-1000"
             priority
           />
-
           <div className="absolute inset-0 flex flex-col justify-center px-6 sm:px-12 md:px-24 lg:px-20 text-center sm:text-left bg-gradient-to-t from-primary via-gray-900/50 to-transparent">
-            {/* <div className="hidden lg:block">
-              <Image
-                src={images[currentIndex]}
-                alt="Church Building"
-                width={500}
-                height={500}
-                className="lg:pl-16 object-cover rounded-md mb-6 "
-                priority
-              />
-            </div> */}
             <div className="max-w-5xl mx-auto sm:mx-0 lg:mt-96">
               <h1 className="text-white">
                 <div className="mt-2 text-4xl py-2 sm:text-5xl md:text-6xl lg:text-6xl font-bold">

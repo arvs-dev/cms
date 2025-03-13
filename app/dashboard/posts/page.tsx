@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,84 +34,47 @@ import {
   Filter,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/lib/supabase";
 
-// In a real app, this would be fetched from your API
-const initialPosts = [
-  {
-    id: 1,
-    title: "Getting Started with Next.js",
-    excerpt:
-      "Learn the basics of Next.js and how to build your first application.",
-    status: "published",
-    category: "Development",
-    date: "Mar 8, 2025",
-    views: 1240,
-  },
-  {
-    id: 2,
-    title: "Understanding React Hooks",
-    excerpt:
-      "A comprehensive guide to React Hooks and how to use them effectively.",
-    status: "draft",
-    category: "React",
-    date: "Mar 7, 2025",
-    views: 0,
-  },
-  {
-    id: 3,
-    title: "CSS Grid Layout Tutorial",
-    excerpt: "Master CSS Grid Layout with this step-by-step tutorial.",
-    status: "scheduled",
-    category: "CSS",
-    date: "Mar 12, 2025",
-    views: 0,
-  },
-  {
-    id: 4,
-    title: "JavaScript Best Practices",
-    excerpt:
-      "Learn the best practices for writing clean and efficient JavaScript code.",
-    status: "published",
-    category: "JavaScript",
-    date: "Mar 5, 2025",
-    views: 856,
-  },
-  {
-    id: 5,
-    title: "Introduction to TypeScript",
-    excerpt:
-      "Get started with TypeScript and learn how it improves your JavaScript code.",
-    status: "published",
-    category: "TypeScript",
-    date: "Mar 3, 2025",
-    views: 1120,
-  },
-  {
-    id: 6,
-    title: "Building a REST API with Node.js",
-    excerpt: "Learn how to build a RESTful API using Node.js and Express.",
-    status: "draft",
-    category: "Backend",
-    date: "Mar 2, 2025",
-    views: 0,
-  },
-  {
-    id: 7,
-    title: "Responsive Web Design Principles",
-    excerpt:
-      "Master the principles of responsive web design for modern websites.",
-    status: "scheduled",
-    category: "Design",
-    date: "Mar 15, 2025",
-    views: 0,
-  },
-];
+interface Post {
+  id: number;
+  title: string;
+  body: string;
+  category: string;
+  published_status: string;
+  published_date: string;
+  excerpt: string;
+  status: string;
+  date: string;
+  views: number;
+}
 
 export default function PostsPage() {
-  const [posts, setPosts] = useState(initialPosts);
+  const [posts, setPosts] = useState<Post[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const { toast } = useToast();
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const { data, error } = await supabase.from("contents").select("*");
+
+        if (error) {
+          console.error("Error fetching posts:", error.message);
+          return;
+        }
+
+        if (data) {
+          setPosts(data);
+        }
+      } catch (err) {
+        console.error("Error fetching posts:", err);
+      }
+    };
+
+    fetchPosts();
+  }, []);
 
   const filteredPosts = posts.filter((post) => {
     const matchesSearch =
@@ -214,8 +177,12 @@ export default function PostsPage() {
                             post.status
                           )}`}
                         >
-                          {post.status.charAt(0).toUpperCase() +
-                            post.status.slice(1)}
+                          {(post.published_status || post.status || "")
+                            .charAt(0)
+                            .toUpperCase() +
+                            (post.published_status || post.status || "").slice(
+                              1
+                            )}
                         </span>
                       </div>
                       <p className="text-sm text-muted-foreground line-clamp-1">

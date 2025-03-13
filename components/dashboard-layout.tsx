@@ -34,8 +34,6 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const navigation = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { name: "Posts", href: "/dashboard/posts", icon: FileText },
-    { name: "Categories", href: "/dashboard/categories", icon: Tag },
-    { name: "Settings", href: "/dashboard/settings", icon: Settings },
   ];
 
   const handleLogout = async () => {
@@ -138,7 +136,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             </button>
           </div>
           <div className="flex items-center flex-shrink-0 px-4">
-            <h1 className="text-xl font-bold">BlogDash</h1>
+            <h1 className="text-xl font-bold">CMS</h1>
           </div>
           <div className="mt-8 flex-grow flex flex-col">
             <nav className="flex-1 px-2 space-y-1">
@@ -194,7 +192,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       <div className="flex flex-col flex-1 overflow-hidden">
         <div className="border-b md:hidden">
           <div className="flex items-center justify-between h-16 px-4">
-            <h1 className="text-xl font-bold">BlogDash</h1>
+            <h1 className="text-xl font-bold">CMS</h1>
             <button
               type="button"
               className="text-foreground focus:outline-none focus:ring-2 focus:ring-primary"

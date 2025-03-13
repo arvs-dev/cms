@@ -9,15 +9,52 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { supabase } from "@/lib/supabase";
 import { FileText, Clock, Tag, Eye } from "lucide-react";
 import { redirect } from "next/navigation";
+import { useEffect, useState } from "react";
 
+interface Post {
+  id: number;
+  title: string;
+  body: string;
+  category: string;
+  published_status: string;
+  published_date: string;
+  excerpt: string;
+  status: string;
+  date: string;
+  views: number;
+}
 export default function DashboardPage() {
   const { user } = useAuth();
+  const [posts, setPosts] = useState<Post[]>([]);
 
   if (!user) {
     redirect("/login"); // or wherever you want to redirect unauthenticated users
   }
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const { data, error } = await supabase.from("contents").select("*");
+
+        if (error) {
+          console.error("Error fetching posts:", error.message);
+          return;
+        }
+
+        if (data) {
+          setPosts(data);
+        }
+      } catch (err) {
+        console.error("Error fetching posts:", err);
+      }
+    };
+
+    fetchPosts();
+  }, []);
+
   const stats = [
     {
       name: "Total Posts",
@@ -27,48 +64,10 @@ export default function DashboardPage() {
     },
     { name: "Categories", value: "8", icon: Tag, change: "No change" },
     {
-      name: "Total Views",
+      name: "Engagements",
       value: "12.5K",
       icon: Eye,
       change: "+8% from last month",
-    },
-  ];
-
-  const recentPosts = [
-    {
-      id: 1,
-      title: "Getting Started with Next.js",
-      status: "Published",
-      date: "Mar 8, 2025",
-      views: 1240,
-    },
-    {
-      id: 2,
-      title: "Understanding React Hooks",
-      status: "Draft",
-      date: "Mar 7, 2025",
-      views: 0,
-    },
-    {
-      id: 3,
-      title: "CSS Grid Layout Tutorial",
-      status: "Scheduled",
-      date: "Mar 12, 2025",
-      views: 0,
-    },
-    {
-      id: 4,
-      title: "JavaScript Best Practices",
-      status: "Published",
-      date: "Mar 5, 2025",
-      views: 856,
-    },
-    {
-      id: 5,
-      title: "Introduction to TypeScript",
-      status: "Published",
-      date: "Mar 3, 2025",
-      views: 1120,
     },
   ];
 
@@ -103,33 +102,24 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="table-auto w-full">
                 <thead>
                   <tr className="border-b text-left">
                     <th className="p-2 font-medium">Title</th>
-                    <th className="p-2 font-medium">Status</th>
                     <th className="p-2 font-medium">Date</th>
                     <th className="p-2 font-medium text-right">Views</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {recentPosts.map((post) => (
-                    <tr key={post.id} className="border-b last:border-0">
+                  {posts.map((post) => (
+                    <tr
+                      key={post.id}
+                      className="border-b last:border-0 hover:bg-gray-50"
+                    >
                       <td className="p-2">{post.title}</td>
-                      <td className="p-2">
-                        <span
-                          className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                            post.status === "Published"
-                              ? "bg-green-100 text-green-800"
-                              : post.status === "Draft"
-                              ? "bg-gray-100 text-gray-800"
-                              : "bg-blue-100 text-blue-800"
-                          }`}
-                        >
-                          {post.status}
-                        </span>
+                      <td className="p-2 text-muted-foreground">
+                        {post.published_date}
                       </td>
-                      <td className="p-2 text-muted-foreground">{post.date}</td>
                       <td className="p-2 text-right">
                         {post.views > 0 ? post.views.toLocaleString() : "-"}
                       </td>
