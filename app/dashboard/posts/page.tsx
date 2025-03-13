@@ -82,7 +82,7 @@ export default function PostsPage() {
       .includes(searchQuery.toLowerCase());
 
     const matchesStatus =
-      statusFilter === "all" || post.status === statusFilter;
+      statusFilter === "all" || post.publication_status === statusFilter;
 
     return matchesSearch && matchesStatus;
   });
