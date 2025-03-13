@@ -41,7 +41,7 @@ interface Post {
   title: string;
   body: string;
   category: string;
-  published_status: string;
+  publication_status: string;
   published_date: string;
   excerpt: string;
   status: string;
@@ -77,9 +77,9 @@ export default function PostsPage() {
   }, []);
 
   const filteredPosts = posts.filter((post) => {
-    const matchesSearch =
-      post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      post.excerpt.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = post.title
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
 
     const matchesStatus =
       statusFilter === "all" || post.status === statusFilter;
@@ -87,8 +87,11 @@ export default function PostsPage() {
     return matchesSearch && matchesStatus;
   });
 
-  const handleDeletePost = (id: number) => {
+  const handleDeletePost = async (id: number) => {
     setPosts(posts.filter((post) => post.id !== id));
+
+    const { error } = await supabase.from("contents").delete().eq("id", id);
+
     toast({
       title: "Post deleted",
       description: "The post has been deleted successfully.",
@@ -174,20 +177,19 @@ export default function PostsPage() {
                         <h3 className="font-medium">{post.title}</h3>
                         <span
                           className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${getStatusBadgeClasses(
-                            post.status
+                            post.publication_status || ""
                           )}`}
                         >
-                          {(post.published_status || post.status || "")
+                          {(post.publication_status || post.status || "")
                             .charAt(0)
                             .toUpperCase() +
-                            (post.published_status || post.status || "").slice(
-                              1
-                            )}
+                            (
+                              post.publication_status ||
+                              post.status ||
+                              ""
+                            ).slice(1)}
                         </span>
                       </div>
-                      <p className="text-sm text-muted-foreground line-clamp-1">
-                        {post.excerpt}
-                      </p>
                       <div className="flex items-center gap-4 text-xs text-muted-foreground">
                         <span>{post.category}</span>
                         <span>{post.date}</span>
