@@ -43,8 +43,8 @@ import DashboardLayout from "@/components/dashboard-layout";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, CalendarIcon, Eye, Save, Upload, X } from "lucide-react";
 import { format } from "date-fns";
-import { Calendar } from "@/components/ui/calendar";
 import { supabase } from "@/lib/supabase";
+import { Calendar } from "@/components/ui/calendar";
 
 // In a real app, these would be fetched from your API
 const categories = [
