@@ -114,9 +114,9 @@ export default function NewsEventsBento() {
   ];
 
   return (
-    <div className="container mx-auto px-4 py-12 ">
+    <div className=" mx-auto px-5 lg:px-32 py-12 ">
       <div className="flex justify-between items-center mb-8">
-        <h2 className="text-3xl font-extrabold bg-primary inline-block px-4 py-2 text-white border-l-8 border-red-500">
+        <h2 className="text-3xl font-extrabold bg-primary inline-block px-4 py-2 text-white">
           Latest News & Events
         </h2>
       </div>
@@ -130,11 +130,11 @@ export default function NewsEventsBento() {
                 key={item.id}
                 className="col-span-1 md:col-span-4 row-span-2 overflow-hidden group"
               >
-                <div className="relative h-[540px] bg-primary transition-transform duration-300 group-hover:scale-105">
+                <div className="relative h-auto bg-primary text-white">
                   <img
                     src={item.image || "/placeholder.svg"}
                     alt={item.title}
-                    className="h-full w-full object-cover"
+                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
                   <div className="absolute bottom-0 p-6 text-white">
@@ -189,7 +189,7 @@ export default function NewsEventsBento() {
                   <img
                     src={item.image || "/placeholder.svg"}
                     alt={item.title}
-                    className="rounded-md w-full h-[280px] object-cover mb-4"
+                    className="rounded-md w-full h-[280px] object-cover mb-4 transition-transform duration-300 group-hover:scale-105"
                   />
                   <div className="space-y-2">
                     <div className="flex items-center text-sm">

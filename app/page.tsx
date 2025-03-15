@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState, useEffect } from "react";
 import { MainNav } from "@/components/main-nav";
 import NewsEventsBento from "@/components/content/news-events";
+import Footer from "@/components/footer";
 
 export default function Home() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -73,7 +74,10 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <NewsEventsBento />
+      <div className="py-16">
+        <NewsEventsBento />
+      </div>
+      <Footer />
     </main>
   );
 }
